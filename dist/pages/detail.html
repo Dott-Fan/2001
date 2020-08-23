@@ -1,0 +1,220 @@
+<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>详情页</title><link rel=stylesheet href=../css/reset.css><link rel=stylesheet href=../css/public.css><link rel=stylesheet href=../css/detail.css><script src=../js/tools.js></script><script src=../tools/jquery.min.js></script></head><body><header><section class=header-con><ul class=float_right><li><a href=JavaScript:;>团800旗下网站</a> <b class=header_seperate></b></li><li><a href=JavaScript:;><i class=phone_icon></i>手机版 </a><b class=header_seperate></b></li><li><a href=JavaScript:;>QQ登录</a> <b class=header_seperate></b></li><li><a href=./login.html>登录</a> <a href=./reg.html>免费注册</a> <b class=header_seperate></b></li><li><a href=JavaScript:;>我的订单</a> <b class=header_seperate></b></li><li><a href=JavaScript:;>购物车</a> <b class=header_seperate></b></li><li><a href=JavaScript:;>帮助中心</a> <b class=header_seperate></b></li><li><a href=JavaScript:;>卖家中心</a></li></ul></section></header><nav><section class=nav-top><h1><a href=./index.html><img src=../images/logo_zhe800.png alt=""></a></h1><form action="" class=float_left><div class="search float_left">搜索</div><input type=text name=keyword> <input type=submit value=""></form><div class=search_right></div><div class=search_link><a href=JavaScript:;><img src=../images/head_three_icon.png alt=""></a></div></section><section class=nav-bottom><ul><li><a href=JavaScript:;>首页</a></li><li><a href=JavaScript:;>淘宝精选</a></li><li><a href=JavaScript:;>9块9包邮</a></li><li><a href=JavaScript:;>排行榜</a></li><li><a href=JavaScript:;>品牌团</a></li><li><a href=JavaScript:;>优品汇</a></li><li><a href=JavaScript:;>精选预告</a></li><li><a href=JavaScript:;>积分商城</a></li></ul></section></nav><section id=show><section class=show-con></section></section><script>const urlObj = getUrlVal();
+        let res = {};
+
+        $.ajax({
+            url:'../server/goods_detail.php',
+            type:"post",
+            dataType:'json',
+            data:{goods_id:urlObj.goods_id},
+            success: function(result){
+                res = result;
+                str =`
+                <div class="links_add">
+                    <a href="https://www.baidu.com">特卖商城</a>
+                    <i>></i>
+                    <a href="JavaScript:;">
+                        <em>${result.cat_one_id}</em>
+                    </a>
+                    <i>></i>
+                    ${result.cat_two_id}
+                    <i>></i>
+                    ${result.cat_three_id}
+                </div>
+                <div class="main_show clear_fix">
+                    <div class="show_left">
+                        <figure>
+                            <img src="${result.goods_big_logo}" alt="">
+                        </figure>
+                        <ul>
+                            <li>
+                                <img src="${result.goods_small_logo}" alt="">
+                            </li>
+                            <li>
+                                <img src="https://z3.tuanimg.com/imagev2/trade/800x800.c9eea597c70aa642ffc1876464d45671.58x58.jpg" alt="">
+                            </li>
+                            <li>
+                                <img src="https://z3.tuanimg.com/imagev2/trade/800x800.c9eea597c70aa642ffc1876464d45671.58x58.jpg" alt="">
+                            </li>
+                            <li>
+                                <img src="https://z3.tuanimg.com/imagev2/trade/800x800.c9eea597c70aa642ffc1876464d45671.58x58.jpg" alt="">
+                            </li>
+                            <li>
+                                <img src="https://z3.tuanimg.com/imagev2/trade/800x800.c9eea597c70aa642ffc1876464d45671.58x58.jpg" alt="">
+                            </li>
+
+                        </ul>
+                        <div class="help_info">
+                            <a class="save" href="">
+                                <i></i>
+                                收藏
+                            </a>
+                            <a class='share' href=""><i></i>
+                                分享
+                            </a>
+                            <a class="warn" href=""><i></i>
+                                举报
+                            </a>
+                        </div>
+                    </div>
+                    <div class="show_right">
+                        <aside>
+
+                        </aside>
+                        <p class="goods_tit">
+                            ${result.goods_name}
+                        </p>
+                        <p class="goods_txt">
+                            ${result.goods_name}
+                        </p>
+                        <div class="goods_info">
+                            <div class="goods_price">
+                                <p class="current_price">
+                                    <span class="now_prcie">
+                                        ¥<i>${result.goods_price}</i>
+                                    </span>
+                                    <del class="pre_price">
+                                        ¥<i>188.00</i>
+                                    </del>
+                                    <em>去客户端访问可以领红包</em>
+                                </p>
+                                <p class="jifen">
+                                    <span>积分</span>
+                                    <em>最多可以返51积分</em>
+                                    <a href="">积分可抵订单金额</a>
+                                </p>
+                                <p class="youhui jifen">
+                                    <span>优惠</span>
+                                    <a href="">指定商品满1件9折</a>
+                                </p>
+                            </div>
+                            <div class="goods_choice">
+                                <div class="addr">
+                                    <span>运费</span>
+                                    <em>江苏&nbsp;泰州&nbsp;&nbsp;&nbsp;&nbsp;至</em>
+                                    <address>北京&nbsp;&nbsp;∨</address>
+                                    <i>免运费</i>
+                                </div>
+                                <div class="fuwu addr">
+                                    <span>服务</span>
+                                    <a href="JavaScript:;"><i>折</i>&nbsp;本商品由折800买手砍价</a>
+                                    <a href="JavaScript:;"><i>48</i>&nbsp;支付成功后48小时发货</a>
+                                </div>
+                                <div class="colors addr">
+                                    <span>颜色</span>
+                                    <ul>
+                                        <li>
+                                            <a href="JavaScript:;"></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="size addr">
+                                    <span>尺码</span>
+                                    <ul>
+                                        <li>
+                                            <a href="">165/84A/m</a>
+                                        </li>
+                                        <li>
+                                            <a href="">165/84A/m</a>
+                                        </li>
+                                        <li>
+                                            <a href="">165/84A/m</a>
+                                        </li>
+                                        <li>
+                                            <a href="">165/84A/m</a>
+                                        </li>
+                                        <li>
+                                            <a href="">165/84A/m</a>
+                                        </li>
+                                        <li>
+                                            <a href="">165/84A/m</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="number addr">
+                                    <span>数量</span>
+                                    <p>
+                                        <i></i>
+                                        <input type="text" value="1">
+                                        <i></i>
+                                    </p>
+                                </div>
+                                <div class="submit">
+                                    <a href="JavaScript:;">立即购买</a>
+                                    <a id='addcart' href="JavaScript:;">加入购物车</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='second_show'>
+                    ${result.goods_introduce}
+                </div> 
+                `
+                $('.show-con').html(str);
+            }
+        })
+
+    /* 加入购物车的思路 */
+    /*
+        1，先判断是否登录，查看cookie有没有login信息
+            如果没有，携带网址数据跳转登录页面。登录成功后跳转回原网址
+
+            利用localstorage模拟购物车
+
+            如果登录，查看购物车中是否已经有这条商品信息，有的话，直接在原来的数量基础上加1
+                        购物车中如果没有的话，直接新增一条商品数据
+
+     */
+        const oAddCart= document.querySelector('.show-con');
+        oAddCart.addEventListener('click', (e)=>{
+            console.log(e);
+            //创建空数组，存储购物车数据 
+            let arr = [];
+
+            if(e.target.id === "addcart"){
+                console.log(document.cookie);
+                if(!document.cookie) {
+                    if(window.confirm('您还没有登录，点击确认去登录') ){
+                        window.location.href = `./login.html?url=${window.location.href}`;
+                    }else{
+                        return;
+                    }   
+                }else{
+                    // 判断购物车是否有这个商品
+                    // 在localStorage中利用cart键名来存储商品数据
+                    if(localStorage.getItem('cart') === null){
+                        // 
+                        res.num = 1;
+                        res.buy = true;
+                        arr.push(res);
+                        console.log( arr );
+                    }else{
+                        
+                        let bool = true;
+                        arr = JSON.parse( localStorage.getItem('cart'))
+                        // 循环遍历购物车的所有数据，查看中间是否已经存在这个商品
+                        arr.forEach((v,k)=>{
+                            if(v.goods_id === res.goods_id){
+                                v.num++;
+                                bool =false;
+                            }
+                        })
+                        //如果bool没有变成false，证明购物车中之前没有这个商品，直接添加
+                        if(bool){
+                            res.num = 1;
+                            res.buy = true;
+                            arr.push(res);
+                        }
+                    }
+                    console.log(arr);
+                    // 将arr的数据存储到localstorage
+                    localStorage.setItem('cart', JSON.stringify(arr));
+                    // 是否跳转到购物车界面
+                    if(window.confirm('是否前往购物车进行结算，前往请点击确认')){
+                        window.location.href='./cart.html'
+                    }else{
+                        return;
+                    }
+                }       
+            }
+        })</script></body></html>

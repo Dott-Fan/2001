@@ -1,0 +1,210 @@
+<!DOCTYPE html><html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><title>购物车</title><link rel=stylesheet href=../css/reset.css><link rel=stylesheet href=../css/public.css><link rel=stylesheet href=../css/cart.css><script src=../tools/jquery.min.js></script></head><body><header><section class=header-con><ul class=float_right><li><a href=JavaScript:;>团800旗下网站</a> <b class=header_seperate></b></li><li><a href=JavaScript:;><i class=phone_icon></i>手机版 </a><b class=header_seperate></b></li><li><a href=JavaScript:;>QQ登录</a> <b class=header_seperate></b></li><li><a href=./login.html>登录</a> <a href=./reg.html>免费注册</a> <b class=header_seperate></b></li><li><a href=JavaScript:;>我的订单</a> <b class=header_seperate></b></li><li><a href=JavaScript:;>购物车</a> <b class=header_seperate></b></li><li><a href=JavaScript:;>帮助中心</a> <b class=header_seperate></b></li><li><a href=JavaScript:;>卖家中心</a></li></ul></section></header><section class=cart_nav><div class=logo_img><a href=./index.html><img src=https://i4.tuanimg.com/shop/asset/d/icon/logo20172x.png alt=""></a></div><div class=cart_nav_r></div></section><article class=area id=cart><div class=cart_tit><p>购物车<span class=count>1</span></p><div></div></div><div class=cart_items><div class=head><p class=all><input type=checkbox name=allcheck1> <span name=all>全选</span></p><p class=product>商品</p><p class=price>单价</p><p class=number>数量</p><p class=money>金额</p><p class=op>操作</p></div><div class=items><table><tbody><tr class=cart_zc><td colspan=6><div class=zc_info><span>满减</span> 满两件减5，上不封顶 <a href="">去凑单</a></div></td></tr><tr class=goods_info><td class=cb><input name=choice type=checkbox></td><td><div class=product><a href=JavaScript:;><img src=https://z3.tuanimg.com/imagev2/trade/800x800.0f0e2561f487dbf9fe96cdd08e5c8c3a.100x100.jpg></a><p>男女士情侣款纯棉休闲短裤夏季宽松韩版纯棉五分裤男沙滩裤大码</p><div class=type><p>颜色：白色</p><p>尺码：M</p></div></div></td><td><div class=price><p>19.0</p><del>30.0</del></div></td><td><div class=number><p><i></i> <input type=text placeholder=1> <i></i></p></div></td><td><div class=money><p>19.0</p></div></td><td><div class=op><a href="">删除</a> <a href="">移入收藏</a></div></td></tr></tbody></table></div></div><div class=cart_recount><p class=all><input type=checkbox name=allcheck2> <span name=all>全选 </span><a href=JavaScript:; class=delall>批量删除</a></p><div class=recount_r><span>共<i>12</i>件 </span><span>总计<em>￥<i>20.00</i></em> </span><a href=JavaScript:;>结算</a></div></div></article><script>/* 
+        根据localStorage中的数据生成页面
+        localStorage中查到的数据，是json格式，使用之前需要解析
+
+        每一次的变更修改，是对数据进行修改，修改完毕后，重新写入到localStorage中，替换掉之前的内容
+        然后重新生成页面
+        
+        */
+        // 获取到的是一个数组，循环遍历生成页面
+       const goods = JSON.parse(localStorage.getItem('cart')) ;
+       const oCart = document.querySelector('#cart')
+       const oTbody = document.querySelector('tbody');
+        //const oCartItems = document.querySelector('.cart_items');
+
+        let bool = false;
+
+
+       console.log(goods);
+
+        // 首次生成的页面
+       setCart(oCart, goods, bool);
+
+       //修改操作
+       oCart.addEventListener('click', e=>{
+
+           //全选操作
+            //关于反选，和全不选，可以参考全选的操作  
+           if( e.target.getAttribute('name') === 'all'){
+                //遍历数组，所有的buy属性更改为true
+                goods.forEach(v=>{
+                    v.buy = true;
+                })
+                console.log( document.querySelector('[name="allcheck1"]') );
+                bool = !Boolean(bool);
+                console.log(bool);
+                // document.querySelector('[name="allcheck1"]').checked = !(document.querySelector('[name="allcheck1"]').checked);
+                // document.querySelector('[name="allcheck2"]').checked = !(document.querySelector('[name="allcheck2"]').checked);
+                //document.querySelector('[class="all"]>input').checked = !(document.querySelector('[class="all"]>input').checked);
+           }
+
+           //单个商品的选择
+           if(e.target.getAttribute('name') === 'choice'){
+               goods.forEach(v=>{
+                   if(v.goods_id == e.target.getAttribute('goods_id')){
+                       v.buy = !v.buy;
+                       
+                   }
+               })
+               bool = !Boolean(bool);
+           }  
+
+            //加的操作
+
+            if(e.target.getAttribute('class') ==='plus'){
+                goods.forEach(v=>{
+                   if(v.goods_id == e.target.getAttribute('goods_id')){
+                       v.num++;
+                        if(v.num > v.goods_number){
+                            v.num = v.goods_number;
+                        }
+                   }
+               }) 
+            } 
+
+            //减法操作
+
+            if(e.target.getAttribute('class') ==='minus'){
+                goods.forEach(v=>{
+                   if(v.goods_id == e.target.getAttribute('goods_id')){
+                       v.num--;
+                        if(v.num < 1){
+                            v.num = 1;
+                        }
+                   }
+               }) 
+            } 
+
+            //计算总和
+           setCart(oCart, goods, bool);
+       })
+
+       function setCart(element,array,bool){
+        //    let str ='';
+
+            // 定义变量存储商品种类,商品个数,商品钱数
+            // 在循环外,定义变量,存储相应的数据
+            let type = 0;  // 种类
+            let n = 0;     // 数量
+            let pay = 0;   // 金额
+
+
+
+
+
+           let str = `
+           <div class="cart_tit">
+                <p>购物车<span class="count">1</span></p>
+                <div></div>
+            </div>
+            <div class="cart_items">
+                <div class="head">
+                    <p class="all">
+                        <input type="checkbox" name="allcheck1" ${bool?'checked':''}>
+                        <span name='all'>全选</span>
+                    </p>
+                    <p class="product">商品</p>
+                    <p class="price">单价</p>
+                    <p class="number">数量</p>
+                    <p class="money">金额</p>
+                    <p class="op">操作</p>
+                </div>
+            <div class="items">
+                <table>
+                    <tbody>
+            `; 
+
+            array.forEach(v=>{
+                if(v.buy){
+                    type++;
+                    n += v.num;
+                    pay += v.num*v.goods_price
+                }
+
+                str +=`
+                    <!-- 活动信息 -->
+                    <tr class="cart_zc">
+                        <td colspan="6">
+                            <div class="zc_info">
+                                <span>满减</span>
+                                    满两件减5，上不封顶
+                                    <a href="">去凑单</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- 商品信息 -->
+                    <tr class="goods_info">
+                        <td class="cb">
+                            <input name='choice' type="checkbox" goods_id=${v.goods_id} ${v.buy?'checked':""}> 
+                        </td>
+                        <td>
+                            <div class="product">
+                                <a href="JavaScript:;">
+                                    <img src="${v.goods_big_logo}">
+                                </a>
+                            <p>男女士情侣款纯棉休闲短裤夏季宽松韩版纯棉五分裤男沙滩裤大码</p>
+                                <div class="type">
+                                    <p>颜色：白色</p>
+                                    <p>尺码：M</p>
+                                    </div>
+                                </div>
+                                    </td>
+                                    <td>
+                                        <div class="price">
+                                            <p>${v.goods_price}</p>
+                                            <del>30.0</del>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="number">
+                                            <p>
+                                                <i class='minus' goods_id=${v.goods_id}></i>
+                                                <input type="text" disabled placeholder='${v.num}'>
+                                                <i class='plus' goods_id=${v.goods_id}></i>
+                                            </p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="money">
+                                            <p>${((v.num)*(v.goods_price)).toFixed(2)}</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="op">
+                                            <a href="JavaScript:;" name='del'>删除</a>
+                                            <a href="JavaScript:;" name='del'>移入收藏</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `
+            })
+
+            str +=`
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="cart_recount">
+            <p class="all">
+                <input type="checkbox" name="allcheck2" ${bool?'checked':""}>
+                <span name='all'>
+                    全选
+                </span>
+                <a href="JavaScript:;" class='delall'>批量删除</a>
+            </p>
+            <div class="recount_r">
+                <span>
+                    共<i>${n}</i>件
+                </span>
+                <span>
+                    总计<em>￥<i>${pay.toFixed(2)}</i></em>
+                </span>
+                <a href="JavaScript:;">
+                    结算
+                </a>
+
+            </div>
+        </div>
+            `; 
+            element.innerHTML = str;
+       }</script></body></html>
